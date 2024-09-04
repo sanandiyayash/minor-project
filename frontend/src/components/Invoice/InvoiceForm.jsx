@@ -117,6 +117,12 @@ const InvoiceForm = () => {
         }
     };
 
+    const handleItemClick = () => {
+        if (allItem.length <= 0) {
+            toast.error('No items available Add items');
+        }
+    }
+
     useEffect(() => {
         async function getItems() {
             try {
@@ -209,6 +215,7 @@ const InvoiceForm = () => {
                                                 name="itemName"
                                                 value={item.itemName}
                                                 onChange={(e) => handleItemChange(e, index)}
+                                                onClick={handleItemClick}
                                                 className="w-full p-1 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                                             >
                                                 <option value="">Select Item</option>
