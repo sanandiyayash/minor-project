@@ -94,7 +94,7 @@ const InvoiceForm = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost:3000/invoice/create',
+                'https://minor-project-backend-rfsf.onrender.com/create',
                 { ...formData },
                 {
                     headers: {
