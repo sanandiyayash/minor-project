@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { login } from '../../api'
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
@@ -81,6 +81,10 @@ const Login = () => {
                             className='input' />
                         <i className={`${showPassword ? "fa-solid fa-eye-slash" : "fa-solid fa-eye"}`} onClick={togglePasswordVisibility} />
                     </div>
+                    <div className="text-sm text-gray-600 text-right">
+                        No account? <Link to="/register" className="text-blue-500 hover:underline">Register here</Link>
+                    </div>
+
                     <button type='submit' className='login-button'>Submit</button>
                 </form>
             </div>

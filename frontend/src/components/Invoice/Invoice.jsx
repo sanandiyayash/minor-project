@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { allInvoice } from '../../api'
-import axios from 'axios';
 import moment from 'moment';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -16,13 +15,7 @@ const Invoice = () => {
 
             try {
                 const token = localStorage.getItem('token');
-                // const data = await allInvoice(token)
-                const response = await axios.get('http://localhost:3000/invoice', {
-                    headers: {
-                        authorization: `Bearer ${token}`
-                    },
-                    withCredentials: true
-                })
+                const response = await allInvoice(token)
                 setAllInvoices(response.data.invoices)
 
 

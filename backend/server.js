@@ -22,4 +22,4 @@ app.use(bodyParser.json());
 app.use("/user", userRouter);
 app.use('/invoice', invoiceRouter)
 app.use('/items', itemRouter)
-app.listen(3000, () => { console.log('server is running on http://localhost:3000') });
+app.listen(process.env.PORT || 3000, () => { console.log('server is running on http://localhost:3000') });

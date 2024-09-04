@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { deleteInvoice, getSingleInvoice } from '../../api';
 
 const InvoiceDetails = () => {
     const [invoice, setInvoice] = useState([]);
@@ -11,12 +12,7 @@ const InvoiceDetails = () => {
     useEffect(() => {
         const fetchSingleInvoice = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/invoice/${id}`, {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    },
-                    withCredentials: true
-                });
+                const response = await getSingleInvoice(token, id)
 
                 setInvoice(response.data.invoice);
 
@@ -32,12 +28,7 @@ const InvoiceDetails = () => {
     const handleDeleteInvoice = async (e) => {
 
         try {
-            const response = await axios.delete(`http://localhost:3000/invoice/${id}`, {
-                headers: {
-                    authorization: `Bearer ${token}`,
-                },
-                withCredentials: true
-            });
+            const response = await deleteInvoice(token, id)
 
             if (response.data.success) {
                 navigate('/')

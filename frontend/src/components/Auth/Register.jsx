@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { register } from '../../api'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from "react-toastify";
 const Register = () => {
     const navigate = useNavigate()
@@ -77,6 +77,10 @@ const Register = () => {
                             className='input' />
                         <i className={`${showPassword ? "fa-solid fa-eye-slash" : "fa-solid fa-eye"}`} onClick={togglePasswordVisibility} />
                     </div>
+                    <div className="text-sm text-gray-600 text-right">
+                        Already registered? <Link to="/login" className="text-blue-500 hover:underline">Login here</Link>
+                    </div>
+
                     <button type='submit' className='login-button'>Submit</button>
                 </form>
             </div>
