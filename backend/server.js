@@ -11,7 +11,7 @@ const app = express();
 
 connectDB();
 app.use(cors({
-    origin: ["https://minor-project-frontend.onrender.com"],
+    origin: ["https://minor-project-frontend.onrender.com", "http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
