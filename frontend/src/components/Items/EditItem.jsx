@@ -94,6 +94,7 @@ const EditItem = () => {
                         Submit
                     </button>
                     <button
+                        type='button'
                         onClick={handleDelete}
                         className="w-1/4 p-2 bg-red-500 text-white rounded hover:bg-red-600"
                     >

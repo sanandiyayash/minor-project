@@ -27,7 +27,6 @@ const invoiceSchema = new mongoose.Schema({
     billNo: {
         type: String,
         required: [true, "Bill number is required"],
-        unique: true
     },
     billDate: {
         type: Date,
@@ -61,9 +60,8 @@ const invoiceSchema = new mongoose.Schema({
     }
 
 });
+invoiceSchema.index({ billNo: 1, user: 1 }, { unique: true });
 
 const Invoice = mongoose.model('Invoice', invoiceSchema);
-// Invoice.init().then(() => {
-//     console.log('Indexes ensured');
-// });
+
 module.exports = Invoice;

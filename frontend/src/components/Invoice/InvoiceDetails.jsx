@@ -31,6 +31,8 @@ const InvoiceDetails = () => {
             const response = await deleteInvoice(token, id)
 
             if (response.data.success) {
+                console.log(response.data);
+
                 navigate('/')
 
             }

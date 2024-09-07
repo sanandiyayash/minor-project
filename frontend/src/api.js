@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'https://minor-project-backend-rfsf.onrender.com';
+// const API_URL = 'https://minor-project-backend-rfsf.onrender.com';
+const API_URL = 'http://localhost:3000';
 
 const axiosInstance = axios.create({
     baseURL: API_URL,
@@ -42,7 +43,15 @@ export const allInvoice = async (token) => {
     })
     return response
 }
-
+export const createInvoice = async (token, { ...formdata }) => {
+    const response = await axiosInstance.post(`/invoice/create`, formdata, {
+        headers: {
+            authorization: `Bearer ${token}`
+        },
+        withCredentials: true
+    })
+    return response
+}
 export const getSingleInvoice = async (token, id) => {
     const response = await axiosInstance.get(`/invoice/${id}`, {
         headers: {
@@ -53,7 +62,7 @@ export const getSingleInvoice = async (token, id) => {
     return response
 }
 export const deleteInvoice = async (token, id) => {
-    const response = await axiosInstance.get(`/invoice/${id}`, {
+    const response = await axiosInstance.delete(`/invoice/${id}`, {
         headers: {
             authorization: `Bearer ${token}`
         },

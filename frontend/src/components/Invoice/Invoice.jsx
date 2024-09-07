@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { allInvoice } from '../../api'
 import moment from 'moment';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 
@@ -49,18 +49,25 @@ const Invoice = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {allInvoices.map((invoice, index) => (
-                                <tr key={invoice._id} className="text-center">
-                                    <td className="py-2 px-4 border-b">{index + 1}</td>
-                                    <td className="py-2 px-4 border-b">
-                                        <Link to={`/invoice/${invoice._id}`} className="text-blue-500 hover:underline">
-                                            {invoice.customerName}
-                                        </Link>
-                                    </td>
-                                    <td className="py-2 px-4 border-b">{invoice.total}</td>
-                                    <td className="py-2 px-4 border-b">{moment(invoice.billDate).format('DD-MM-YYYY')}</td>
+                            {allInvoices.length > 0 ? (
+                                allInvoices.map((invoice, index) => (
+                                    <tr key={invoice._id} className="text-center">
+                                        <td className="py-2 px-4 border-b">{index + 1}</td>
+                                        <td className="py-2 px-4 border-b">
+                                            <Link to={`/invoice/${invoice._id}`} className="text-blue-500 hover:underline">
+                                                {invoice.customerName}
+                                            </Link>
+                                        </td>
+                                        <td className="py-2 px-4 border-b">{invoice.total}</td>
+                                        <td className="py-2 px-4 border-b">{moment(invoice.billDate).format('DD-MM-YYYY')}</td>
+                                    </tr>
+                                ))) : (
+                                <tr>
+                                    <td>No invoices</td>
+
                                 </tr>
-                            ))}
+                            )
+                            }
                         </tbody>
                     </table>
                 </div>

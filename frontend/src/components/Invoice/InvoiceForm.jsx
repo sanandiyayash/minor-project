@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { getAllitems } from '../../api'
+import { getAllitems, createInvoice } from '../../api'
 import { ToastContainer, toast } from "react-toastify";
-
 const InvoiceForm = () => {
-
     const [formData, setFormData] = useState({
         billNo: "",
         billDate: "",
@@ -25,12 +22,20 @@ const InvoiceForm = () => {
         total: "",
     });
 
-    const [allItem, setAllitem] = useState([])
-    const token = localStorage.getItem('token')
+    const [allItem, setAllitem] = useState([]);
+    const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+
+        if (name === 'cgst' || name === 'sgst') {
+            calculateTotals(formData.items, {
+                ...formData,
+                [name]: value
+            });
+        }
     };
 
     const handleItemChange = (e, index) => {
@@ -60,22 +65,23 @@ const InvoiceForm = () => {
             }
         }
 
-        // Calculate total amounts
-        const totalAmount = newItems.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
-        const cgstRate = 0.09;
-        const sgstRate = 0.09;
-        const cgst = totalAmount * cgstRate;
-        const sgst = totalAmount * sgstRate;
-        const total = totalAmount + cgst + sgst;
+        calculateTotals(newItems);
+    };
+
+    const calculateTotals = (items, updatedFormData = formData) => {
+        const totalAmount = items.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
+        const cgstRate = parseFloat(updatedFormData.cgst) || 0;
+        const sgstRate = parseFloat(updatedFormData.sgst) || 0;
+        const cgstAmount = (totalAmount * cgstRate) / 100;
+        const sgstAmount = (totalAmount * sgstRate) / 100;
+        const total = totalAmount + cgstAmount + sgstAmount;
 
         setFormData({
-            ...formData,
-            items: newItems,
-            cgst: cgst.toFixed(2),
-            sgst: sgst.toFixed(2),
+            ...updatedFormData,
+            items: items,
             total: total.toFixed(2),
         });
-    }
+    };
 
     const addItemsRow = () => {
         setFormData({
@@ -86,23 +92,26 @@ const InvoiceForm = () => {
                 rate: '',
                 amount: '',
             }]
-        })
-    }
+        });
+    };
+
+    const removeLastItemRow = () => {
+        const updatedItems = [...formData.items];
+        if (updatedItems.length > 1) {
+            updatedItems.pop();
+            setFormData({
+                ...formData,
+                items: updatedItems,
+            });
+            calculateTotals(updatedItems);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(
-                'https://minor-project-backend-rfsf.onrender.com/create',
-                { ...formData },
-                {
-                    headers: {
-                        authorization: `Bearer ${token}`,
-                    },
-                    withCredentials: true,
-                }
-            );
+            const response = await createInvoice(token, { ...formData });
 
             if (response.data.success === true) {
                 toast.success('Invoice created successfully');
@@ -119,22 +128,37 @@ const InvoiceForm = () => {
 
     const handleItemClick = () => {
         if (allItem.length <= 0) {
-            toast.error('No items available Add items');
+            toast.error('No items available. Add items.');
         }
-    }
+    };
+
+
+
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function getItems() {
+        const getItems = async () => {
             try {
-                const res = await getAllitems(token)
+                setLoading(true);
+                const res = await getAllitems(token);
                 setAllitem(res.data.items);
             } catch (error) {
                 console.log(error);
-                toast.error(error.response?.data?.message || error.message)
+                toast.error(error.response?.data?.message || error.message);
+            } finally {
+                setLoading(false);
             }
+        };
+
+        getItems();
+    }, [token]);
+
+    useEffect(() => {
+
+        if (!loading && allItem.length === 0) {
+            toast.error('No items available. Add items to create invoice');
         }
-        getItems()
-    }, [token])
+    }, [allItem, loading]);
 
     return (
         <>
@@ -143,6 +167,7 @@ const InvoiceForm = () => {
                     <p>Company Invoice</p>
                 </div>
                 <form onSubmit={handleSubmit}>
+                    {/* Invoice Header Section */}
                     <div className="invoice-header-section grid grid-cols-2 gap-6 mb-6">
                         <div className="invoice-bill-no invoice-header-input-wrapper">
                             <label htmlFor="billNo" className="block text-gray-700 font-medium mb-2">Invoice Number :</label>
@@ -194,6 +219,7 @@ const InvoiceForm = () => {
                         </div>
                     </div>
 
+                    {/* Invoice Item Section */}
                     <div className="invoice-item-section mb-6">
                         <table className="min-w-full border-collapse border border-gray-300">
                             <thead>
@@ -249,83 +275,75 @@ const InvoiceForm = () => {
                                                 type="number"
                                                 name="rate"
                                                 value={item.rate}
-                                                readOnly
                                                 placeholder="Rate"
-                                                className="w-full p-1 border rounded bg-gray-100 focus:outline-none"
+                                                onChange={(e) => handleItemChange(e, index)}
+                                                className="w-full p-1 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                                             />
                                         </td>
-                                        <td className="p-2 border border-gray-300">
-                                            <input
-                                                type="number"
-                                                name="amount"
-                                                value={item.amount}
-                                                readOnly
-                                                placeholder="Amount"
-                                                className="w-full p-1 border rounded bg-gray-100 focus:outline-none"
-                                            />
-                                        </td>
+                                        <td className="p-2 border border-gray-300">{item.amount}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                        <button type="button" onClick={addItemsRow} className="mt-4 p-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition duration-200">Add row</button>
+
+                        {/* Add and Remove Item Buttons */}
+                        <div className="flex space-x-4 mt-4">
+                            <button type="button" onClick={addItemsRow} className="p-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition duration-200">Add row</button>
+                            {formData.items.length > 1 && (
+                                <button type="button" onClick={removeLastItemRow} className="p-2 bg-red-500 text-white rounded hover:bg-red-600 transition duration-200">Remove last row</button>
+                            )}
+                        </div>
                     </div>
 
-                    <div className="invoice-tax-section grid grid-cols-3 gap-4 mb-6">
-                        <div className="invoice-tax-field">
-                            <label className="block text-gray-700 font-medium mb-2">C.GST:</label>
+                    {/* CGST, SGST, Total Section */}
+                    <div className="invoice-tax-section grid grid-cols-3 gap-6 mb-6">
+                        <div className="cgst-wrapper invoice-header-input-wrapper">
+                            <label htmlFor="cgst" className="block text-gray-700 font-medium mb-2">CGST % :</label>
                             <input
                                 type="number"
-                                name="cgst"
                                 value={formData.cgst}
+                                id="cgst"
+                                name="cgst"
                                 onChange={handleChange}
                                 placeholder="CGST"
-                                readOnly
-                                className="w-full p-2 border rounded bg-gray-100 focus:outline-none"
+                                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                             />
                         </div>
-                        <div className="invoice-tax-field">
-                            <label className="block text-gray-700 font-medium mb-2">S.GST:</label>
+                        <div className="sgst-wrapper invoice-header-input-wrapper">
+                            <label htmlFor="sgst" className="block text-gray-700 font-medium mb-2">SGST % :</label>
                             <input
                                 type="number"
-                                name="sgst"
                                 value={formData.sgst}
+                                id="sgst"
+                                name="sgst"
                                 onChange={handleChange}
                                 placeholder="SGST"
-                                readOnly
-                                className="w-full p-2 border rounded bg-gray-100 focus:outline-none"
+                                className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                             />
                         </div>
-                        <div className="invoice-tax-field">
-                            <label className="block text-gray-700 font-medium mb-2">Total:</label>
+                        <div className="total-wrapper invoice-header-input-wrapper">
+                            <label htmlFor="total" className="block text-gray-700 font-medium mb-2">Total :</label>
                             <input
                                 type="number"
-                                name="total"
                                 value={formData.total}
-                                onChange={handleChange}
+                                id="total"
+                                name="total"
+                                disabled
                                 placeholder="Total"
-                                readOnly
-                                className="w-full p-2 border rounded bg-gray-100 focus:outline-none"
+                                className="w-full p-2 border rounded bg-gray-100"
                             />
                         </div>
                     </div>
 
-                    <div className="submit-button mt-6 text-center">
-                        <button
-                            type="submit"
-                            className="w-1/4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition duration-200"
-                        >
-                            Submit
-                        </button>
-                    </div>
-
+                    {/* Submit Button */}
+                    <button type="submit" className="w-full p-3 bg-purple-500 text-white rounded hover:bg-purple-600 transition duration-200">
+                        Submit Invoice
+                    </button>
                 </form>
             </div>
-
             <ToastContainer />
         </>
     );
-
 };
 
 export default InvoiceForm;

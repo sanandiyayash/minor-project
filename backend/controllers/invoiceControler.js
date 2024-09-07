@@ -23,11 +23,22 @@ const fetchAllitems = async (req, res) => {
     }
 }
 const createInvoice = async (req, res) => {
+    console.log("create invoice");
+
     try {
         const { billNo, billDate, customerName, billDueDate, items, cgst, sgst, total } = req.body;
 
-        if (!billNo || !billDate || !customerName || !billDueDate || !items || !cgst || !sgst || !total) {
+        if (!billNo || !billDate || !customerName || !billDueDate || !cgst || !sgst || !total) {
             return res.status(400).json({ message: "All fields are required", success: false, });
+        }
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            if (!item.itemName || !item.quantity || !item.unit || !item.rate || !item.amount) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Item is missing`,
+                });
+            }
         }
         const newInvoice = await Invoice.create({
             billNo,
@@ -84,6 +95,7 @@ const InvoiceDetails = async (req, res) => {
 };
 
 const deleteInvoice = async (req, res) => {
+
     try {
         const { invoiceId } = req.params;
         const invoice = await Invoice.findByIdAndDelete(invoiceId);

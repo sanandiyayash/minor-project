@@ -33,7 +33,7 @@ const LeftSideSection = () => {
                     <>
                         <NavLink
                             className={({ isActive }) =>
-                                `navlink py-3 px-6 text-center rounded-lg transition duration-300 ${isActive ? 'bg-purple-700 text-white' : 'bg-purple-500 hover:bg-purple-700'
+                                `navlink py-3 px-6 text-center rounded-lg transition duration-300 ${isActive ? 'bg-gray-700 text-white' : 'bg-purple-500 hover:bg-purple-700'
                                 }`
                             }
                             to="/login"
@@ -42,7 +42,7 @@ const LeftSideSection = () => {
                         </NavLink>
                         <NavLink
                             className={({ isActive }) =>
-                                `navlink py-3 px-6 text-center rounded-lg transition duration-300 ${isActive ? 'bg-purple-700 text-white' : 'bg-purple-500 hover:bg-purple-700'
+                                `navlink py-3 px-6 text-center rounded-lg transition duration-300 ${isActive ? 'bg-gray-700 text-white' : 'bg-purple-500 hover:bg-purple-700'
                                 }`
                             }
                             to="/register"
@@ -54,7 +54,7 @@ const LeftSideSection = () => {
                     <>
                         <NavLink
                             className={({ isActive }) =>
-                                `navlink flex items-center py-3 px-6 text-lg rounded-lg transition duration-300 ${isActive ? 'bg-gray-700 text-white' : 'bg-gray-800 hover:bg-gray-700'
+                                `navlink flex items-center py-3 px-6 text-lg rounded-lg transition duration-300 ${isActive ? 'bg-gray-500 text-white' : 'bg-gray-800 hover:bg-gray-700'
                                 }`
                             }
                             to="/"
@@ -64,7 +64,7 @@ const LeftSideSection = () => {
                         </NavLink>
                         <NavLink
                             className={({ isActive }) =>
-                                `navlink flex items-center py-3 px-6 text-lg rounded-lg transition duration-300 ${isActive ? 'bg-gray-700 text-white' : 'bg-gray-800 hover:bg-gray-700'
+                                `navlink flex items-center py-3 px-6 text-lg rounded-lg transition duration-300 ${isActive ? 'bg-gray-500 text-white' : 'bg-gray-800 hover:bg-gray-700'
                                 }`
                             }
                             to="/invoice/new"
@@ -74,24 +74,28 @@ const LeftSideSection = () => {
                         </NavLink>
                         <NavLink
                             className={({ isActive }) =>
-                                `navlink flex items-center py-3 px-6 text-lg rounded-lg transition duration-300 ${isActive ? 'bg-gray-700 text-white' : 'bg-gray-800 hover:bg-gray-700'
+                                `navlink flex items-center py-3 px-6 text-lg rounded-lg transition duration-300 ${isActive ? 'bg-gray-500 text-white' : 'bg-gray-800 hover:bg-gray-700'
                                 }`
                             }
                             to="/item/new"
+                            end
                         >
                             <i className="fa-solid fa-basket-shopping mr-3"></i>
                             <span>Add Item</span>
                         </NavLink>
                         <NavLink
                             className={({ isActive }) =>
-                                `navlink flex items-center py-3 px-6 text-lg rounded-lg transition duration-300 ${isActive ? 'bg-gray-700 text-white' : 'bg-gray-800 hover:bg-gray-700'
+                                `navlink flex items-center py-3 px-6 text-lg rounded-lg transition duration-300 ${isActive ? 'bg-gray-500 text-white' : 'bg-gray-800 hover:bg-gray-700'
                                 }`
                             }
                             to="/item"
+                            end
                         >
                             <i className="fa-solid fa-basket-shopping mr-3"></i>
                             <span>Items</span>
                         </NavLink>
+
+
 
                         <div className="mt-8">
                             <Logout onLogout={() => setToken(null)} />
