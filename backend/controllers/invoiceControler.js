@@ -12,16 +12,7 @@ const allInvoice = async (req, res) => {
     }
 };
 
-const fetchAllitems = async (req, res) => {
-    try {
-        const currentUser = req.user;
-        const items = await Item.find({ owner: currentUser })
-        if (!items) res.status(400).json({ message: "item not found", success: false })
-        return res.status(200).json({ message: 'item fetched successfully', items })
-    } catch (error) {
-        res.status(500).json({ message: "Internal Server Error", error: error.message });
-    }
-}
+
 const createInvoice = async (req, res) => {
     console.log("create invoice");
 
@@ -124,4 +115,4 @@ const deleteInvoice = async (req, res) => {
     }
 };
 
-module.exports = { allInvoice, createInvoice, InvoiceDetails, deleteInvoice, fetchAllitems };
+module.exports = { allInvoice, createInvoice, InvoiceDetails, deleteInvoice };

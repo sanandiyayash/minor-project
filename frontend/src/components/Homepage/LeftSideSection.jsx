@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import Logout from '../Auth/Logout';
-
+import logo from "../../assets/logo.png"
 const LeftSideSection = () => {
     const location = useLocation()
     const [token, setToken] = useState(localStorage.getItem('token'));
@@ -23,12 +23,12 @@ const LeftSideSection = () => {
 
     return (
         <div className="left-section bg-gray-900 text-white flex flex-col items-center p-6 w-full h-screen space-y-8">
-            <div className="logo mb-4">
-                <Link to="/p" className="text-purple-400 text-3xl font-bold">
-                    logo
+            <div className="logo">
+                <Link to="/" className="text-purple-400  font-bold">
+                    <img src={logo} alt="logo img" />
                 </Link>
             </div>
-            <div className="navLinks w-full flex flex-col space-y-4">
+            <div className="navLinks w-full flex flex-col space-y-4 mt-3">
                 {!token ? (
                     <>
                         <NavLink

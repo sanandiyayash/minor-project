@@ -1,9 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const { allInvoice, createInvoice, InvoiceDetails, deleteInvoice, fetchAllitems } = require('../controllers/invoiceControler')
+const { allInvoice, createInvoice, InvoiceDetails, deleteInvoice } = require('../controllers/invoiceControler')
 const { isLoggedIn } = require('../middlewares/isLoggedIn')
-
-
 
 router.get('/', isLoggedIn, allInvoice)
 router.post('/create', isLoggedIn, createInvoice)

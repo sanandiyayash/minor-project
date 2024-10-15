@@ -158,7 +158,7 @@ const InvoiceForm = () => {
         if (!loading && allItem.length === 0) {
             toast.error('No items available. Add items to create invoice');
         }
-    }, [allItem, loading]);
+    }, [loading]);
 
     return (
         <>
@@ -167,7 +167,6 @@ const InvoiceForm = () => {
                     <p>Company Invoice</p>
                 </div>
                 <form onSubmit={handleSubmit}>
-                    {/* Invoice Header Section */}
                     <div className="invoice-header-section grid grid-cols-2 gap-6 mb-6">
                         <div className="invoice-bill-no invoice-header-input-wrapper">
                             <label htmlFor="billNo" className="block text-gray-700 font-medium mb-2">Invoice Number :</label>
@@ -219,7 +218,6 @@ const InvoiceForm = () => {
                         </div>
                     </div>
 
-                    {/* Invoice Item Section */}
                     <div className="invoice-item-section mb-6">
                         <table className="min-w-full border-collapse border border-gray-300">
                             <thead>
@@ -261,14 +259,24 @@ const InvoiceForm = () => {
                                             />
                                         </td>
                                         <td className="p-2 border border-gray-300">
-                                            <input
+                                            {/* <input
                                                 type="text"
                                                 name="unit"
                                                 value={item.unit}
                                                 placeholder="Unit"
                                                 onChange={(e) => handleItemChange(e, index)}
                                                 className="w-full p-1 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                            />
+                                            /> */}
+
+
+                                            <select name="unit"
+                                                value={item.unit}
+                                                onChange={(e) => handleItemChange(e, index)}
+                                                className="w-full p-1 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                            >
+                                                <option value="pcs">Pcs</option>
+                                                <option value="Kg">Kg</option>
+                                            </select>
                                         </td>
                                         <td className="p-2 border border-gray-300">
                                             <input
@@ -280,13 +288,12 @@ const InvoiceForm = () => {
                                                 className="w-full p-1 border rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                                             />
                                         </td>
-                                        <td className="p-2 border border-gray-300">{item.amount}</td>
+                                        <td className="p-2 border border-gray-300"><p className="w-full p-1 text-center border rounded focus:outline-none focus:ring-2 focus:ring-purple-500">{item.amount || 0}</p></td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
 
-                        {/* Add and Remove Item Buttons */}
                         <div className="flex space-x-4 mt-4">
                             <button type="button" onClick={addItemsRow} className="p-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition duration-200">Add row</button>
                             {formData.items.length > 1 && (
@@ -295,7 +302,6 @@ const InvoiceForm = () => {
                         </div>
                     </div>
 
-                    {/* CGST, SGST, Total Section */}
                     <div className="invoice-tax-section grid grid-cols-3 gap-6 mb-6">
                         <div className="cgst-wrapper invoice-header-input-wrapper">
                             <label htmlFor="cgst" className="block text-gray-700 font-medium mb-2">CGST % :</label>
