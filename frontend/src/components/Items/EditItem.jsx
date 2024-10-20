@@ -76,7 +76,7 @@ const EditItem = () => {
                     name='itemName'
                     value={formData.itemName}
                     onChange={handleInput}
-                    className="w-full p-2 border border-gray-300 rounded rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-300  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <input
                     type="number"
@@ -84,19 +84,19 @@ const EditItem = () => {
                     name='price'
                     value={formData.price}
                     onChange={handleInput}
-                    className="w-full p-2 border border-gray-300 rounded rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-2 border border-gray-300  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <div className='flex justify-between'>
                     <button
                         type='submit'
-                        className="w-1/4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
                     >
                         Submit
                     </button>
                     <button
                         type='button'
                         onClick={handleDelete}
-                        className="w-1/4 p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                        className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
                     >
                         Delete item
                     </button>

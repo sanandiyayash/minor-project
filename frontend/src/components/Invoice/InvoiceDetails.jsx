@@ -84,7 +84,7 @@ const InvoiceDetails = () => {
                     <tbody>
                         {invoice.items && invoice.items.length > 0 ? (
                             invoice.items.map((item, index) => (
-                                <tr key={index}>
+                                <tr key={index} style={{ textAlign: "center" }}>
                                     <td className="p-2 border-b border-gray-300">{item.itemName}</td>
                                     <td className="p-2 border-b border-gray-300">{item.quantity}</td>
                                     <td className="p-2 border-b border-gray-300">{item.unit}</td>
